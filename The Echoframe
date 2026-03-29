@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Echoframe Demo</title>
+<style>
+body {
+  font-family: Arial;
+  text-align: center;
+  background: #f5f7fa;
+}
+
+h1 {
+  margin-top: 20px;
+}
+
+.step {
+  display: none;
+  margin-top: 30px;
+}
+
+.active {
+  display: block;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.color-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+#canvas {
+  border: 2px solid #ccc;
+  margin-top: 20px;
+}
+
+.light {
+  font-size: 50px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Echoframe 🌱</h1>
+
+<!-- STEP 1 -->
+<div id="step1" class="step active">
+  <h2>Step 1: How do you feel today?</h2>
+  
+  <button class="color-btn" style="background:red;" onclick="selectMood('red')"></button>
+  <button class="color-btn" style="background:orange;" onclick="selectMood('orange')"></button>
+  <button class="color-btn" style="background:green;" onclick="selectMood('green')"></button>
+</div>
+
+<!-- STEP 2 -->
+<div id="step2" class="step">
+  <h2>Step 2: Draw your feeling</h2>
+  
+  <canvas id="canvas" width="300" height="300"></canvas><br>
+  <button onclick="nextStep()">Next</button>
+</div>
+
+<!-- STEP 3 -->
+<div id="step3" class="step">
+  <h2>Step 3: Family Emotion Light</h2>
+  
+  <div id="light" class="light"></div>
+  <p>Your family can see your status (not details)</p>
+</div>
+
+<script>
+let mood = "";
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let drawing = false;
+
+// Step 1
+function selectMood(color) {
+  mood = color;
+  document.getElementById("step1").classList.remove("active");
+  document.getElementById("step2").classList.add("active");
+}
+
+// Canvas Drawing
+canvas.addEventListener("mousedown", () => drawing = true);
+canvas.addEventListener("mouseup", () => drawing = false);
+
+canvas.addEventListener("mousemove", draw);
+
+function draw(e) {
+  if (!drawing) return;
+  ctx.fillStyle = mood;
+  ctx.fillRect(e.offsetX, e.offsetY, 5, 5);
+}
+
+// Step 2 → 3
+function nextStep() {
+  document.getElementById("step2").classList.remove("active");
+  document.getElementById("step3").classList.add("active");
+
+  let light = document.getElementById("light");
+
+  if (mood === "green") {
+    light.innerHTML = "🟢";
+  } else if (mood === "orange") {
+    light.innerHTML = "🟡";
+  } else {
+    light.innerHTML = "🔴";
+  }
+}
+</script>
+
+</body>
+</html>
